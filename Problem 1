@@ -1,0 +1,37 @@
+import numpy as np
+
+def lagrange_interpolation(x_vals, y_vals, x):
+    n = len(x_vals)
+    result = 0.0
+    for i in range(n):
+        term = y_vals[i]
+        for j in range(n):
+            if i != j:
+                term *= (x - x_vals[j]) / (x_vals[i] - x_vals[j])
+        result += term
+    return result
+
+
+x_values = np.array([0.698, 0.733, 0.768, 0.803])
+y_values = np.array([0.7661, 0.7432, 0.7193, 0.6946])
+
+
+x_target = 0.750
+
+
+true_value = 0.7317
+
+
+p1 = lagrange_interpolation(x_values[:2], y_values[:2], x_target)  # 一次
+p2 = lagrange_interpolation(x_values[:3], y_values[:3], x_target)  # 二次
+p3 = lagrange_interpolation(x_values[:4], y_values[:4], x_target)  # 三次
+
+
+error_p1 = abs(p1 - true_value)
+error_p2 = abs(p2 - true_value)
+error_p3 = abs(p3 - true_value)
+
+
+print(f"一次插值: P1(0.750) = {p1}, 誤差 = {error_p1}")
+print(f"二次插值: P2(0.750) = {p2}, 誤差 = {error_p2}")
+print(f"三次插值: P3(0.750) = {p3}, 誤差 = {error_p3}")
