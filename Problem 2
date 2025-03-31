@@ -1,0 +1,27 @@
+import numpy as np
+
+def lagrange_interpolation(x_vals, y_vals, x):
+    n = len(x_vals)
+    result = 0.0
+    for i in range(n):
+        term = y_vals[i]
+        for j in range(n):
+            if i != j:
+                term *= (x - x_vals[j]) / (x_vals[i] - x_vals[j])
+        result += term
+    return result
+
+y_values = np.array([0.740818, 0.670320, 0.606531, 0.548812])
+x_values = np.array([0.3, 0.4, 0.5, 0.6])
+
+
+x_guess = 0.6
+
+max_iterations = 20
+
+for _ in range(max_iterations):
+    x_new = lagrange_interpolation(y_values, x_values, x_guess)
+    x_guess = (x_new+x_guess)/2
+
+print(f"近似解 x ≈ {x_guess}")
+print(f"誤差為: {x_guess-x_new}")
