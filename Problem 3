@@ -1,0 +1,32 @@
+import numpy as np
+import scipy.interpolate as spi
+
+T = np.array([0, 3, 5, 8, 13])
+D = np.array([0, 200, 375, 620, 990])
+V = np.array([75, 77, 80, 74, 72])  # 速度 (ft/s)
+
+hermite_interp = spi.BarycentricInterpolator(T)
+hermite_interp.set_yi(np.column_stack((D, V)))
+
+# (a)
+t_target = 10
+d_pred = hermite_interp(t_target)
+
+print(f"在 t = 10 秒時，預測位置 D ≈ {d_pred[0]:.2f} 英尺，速度 V ≈ {d_pred[1]:.2f} 英尺/秒")
+
+#(b)
+a = 0
+b = 0
+threshold = 55 * 5280 / 3600
+for t in np.linspace(0, 13, 100):
+    if hermite_interp(t)[1] > threshold:
+        print(f"在時間{t}時速度超過目標值{threshold}")
+        a = 1
+    if hermite_interp(t)[1]>b:
+        b = hermite_interp(t)[1]
+
+if a == 0:
+    print(f"速度未超過目標值{threshold}")
+
+#(c)
+print(f"最高速度:{b}")
